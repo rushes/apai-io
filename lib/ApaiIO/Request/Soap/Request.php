@@ -64,7 +64,11 @@ class Request implements RequestInterface
     {
         $requestParams = $this->buildRequestParams($operation);
 
-        $result = $this->performSoapRequest($operation, $requestParams);
+        try {
+            $result = $this->performSoapRequest($operation, $requestParams);
+        } catch (\Exception $e) {
+            throw $e;
+        }
 
         return $result;
     }
@@ -149,7 +153,13 @@ class Request implements RequestInterface
         );
         $soapClient->__setSoapHeaders($this->buildSoapHeader($operation));
 
-        return $soapClient->__soapCall($operation->getName(), array($params));
+        try {
+            $result = $soapClient->__soapCall($operation->getName(), array($params));
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return $result;
     }
 
     /**

@@ -70,7 +70,11 @@ class ApaiIO
 
         $requestObject = RequestFactory::createRequest($configuration);
 
-        $response = $requestObject->perform($operation);
+        try {
+            $response = $requestObject->perform($operation);
+        } catch (\Exception $e) {
+            throw $e;
+        }
 
         return $this->applyResponseTransformer($response, $configuration);
     }
